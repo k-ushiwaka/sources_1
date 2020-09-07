@@ -5,7 +5,7 @@ module top_tb
     parameter   THRESHOLDa                     = 3600,//42601,
     parameter   THRESHOLDb                     = 22500,//18889,
     parameter   THRESHOLDc                     = 57600,
-    parameter   THRESHOLDd                     = 57600
+    parameter   THRESHOLDd                     = 80000
   )
   (
     input               i_sys_clk_p,
@@ -256,27 +256,27 @@ module top_tb
         .o_b        (w_tpg_b)
     );
 
-    // onscreen U_onscreen(
-    //     .i_pclk             (i_clk_148),
-    //     .i_rst              (i_rst),
-    //     .i_on_sw            (1'b0),
-    //     .i_treshuld1        (24'd57600),
-    //     .i_treshuld2        (24'd22500),
-    //     .i_treshuld3        (24'd3600),
-    //     .i_gaze_position_x  (11'd1567),
-    //     .i_gaze_position_y  (11'd0),
-    //     .i_hs               (w_sync_h_delay),
-    //     .i_vs               (w_sync_v_delay),
-    //     .i_valid            (w_sync_h_delay && w_sync_v_delay),
-    //     .i_data             ({w_tpg_r,w_tpg_g,w_tpg_b}),
-    //     .o_hs               (w_onscreen_hs),
-    //     .o_vs               (w_onscreen_vs),
-    //     .o_valid            (w_onscreen_valid),
-    //     .o_data_r           (w_onscreen_data_r),
-    //     .o_data_g           (w_onscreen_data_g),
-    //     .o_data_b           (w_onscreen_data_b)
+     onscreen U_onscreen(
+         .i_pclk             (i_clk_148),
+         .i_rst              (i_rst),
+         .i_on_sw            (1'b1),
+         .i_treshuld1        (24'd57600),
+         .i_treshuld2        (24'd22500),
+         .i_treshuld3        (24'd3600),
+         .i_gaze_position_x  (11'd960),
+         .i_gaze_position_y  (11'd0),
+         .i_hs               (w_sync_h_delay),
+         .i_vs               (w_sync_v_delay),
+         .i_valid            (w_sync_h_delay && w_sync_v_delay),
+         .i_data             ({w_tpg_r,w_tpg_g,w_tpg_b}),
+         .o_hs               (w_onscreen_hs),
+         .o_vs               (w_onscreen_vs),
+         .o_valid            (w_onscreen_valid),
+         .o_data_r           (w_onscreen_data_r),
+         .o_data_g           (w_onscreen_data_g),
+         .o_data_b           (w_onscreen_data_b)
         
-    // );
+     );
 //--- Definition Paramater ---//
     definition_param_txside U_definition_param_txside(
         .i_clk              (i_clk_148),
@@ -286,7 +286,7 @@ module top_tb
         .i_tres_1           (24'd57600),
         .i_tres_2           (24'd22500),
         .i_tres_3           (24'd3600),
-        .i_vsync            (w_sync_v_delay),
+        .i_vsync            (w_onscreen_vs),
         .o_gaze_x           (w_gaze_x_tx),
         .o_gaze_y           (w_gaze_y_tx),
         .o_tres_1           (w_tres_1_tx),
@@ -309,11 +309,11 @@ module top_tb
         .i_read_clk     (w_clk_200),
         .i_rst          (i_rst),
         //input
-        .i_sync_h       (w_sync_h_delay),
-        .i_sync_v       (w_sync_v_delay),
-        .i_r            (w_tpg_r),
-        .i_g            (w_tpg_g),
-        .i_b            (w_tpg_b),
+        .i_sync_h       (w_onscreen_hs),
+        .i_sync_v       (w_onscreen_vs),
+        .i_r            (w_onscreen_data_r),
+        .i_g            (w_onscreen_data_g),
+        .i_b            (w_onscreen_data_b),
         //output
         .o_data_valid   (w_buff_data_valid),
         .o_h_count      (w_buff_h_count),
